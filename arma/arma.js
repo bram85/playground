@@ -42,8 +42,8 @@ function arma( ar, ma, n ) {
 
 var data = arma( [1], [1], 100 );
 
-var WIDTH = 400;
-var HEIGHT = 200;
+var WIDTH = 800;
+var HEIGHT = 600;
 var MARGIN = 20;
 
 y = d3.scale.linear().domain( [ d3.min( data ), d3.max( data ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
