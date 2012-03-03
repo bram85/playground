@@ -2,6 +2,10 @@
  * Produces n values according to the ARMA model.
  */
 
+var WIDTH = 800;
+var HEIGHT = 600;
+var MARGIN = 20;
+
 function arma( ar, ma, n ) {
   var result = [];
 
@@ -43,26 +47,18 @@ function arma( ar, ma, n ) {
 function update( ar, ma, n ) {
   var data = arma( ar, ma, n );
 
-  var WIDTH = 800;
-  var HEIGHT = 600;
-  var MARGIN = 20;
-
   y = d3.scale.linear().domain( [ d3.min( data.concat( [ 0 ] ) ), d3.max( data.concat( [ ] ) ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
-  x = d3.scale.linear().domain( [ 0, 100 ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
+  x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
-  var graph = d3.select( "#graph" )
-    .append( "svg:svg" )
-    .attr( "width", WIDTH )
-    .attr( "height", HEIGHT );
-
-  var g = graph.append( "svg:g" )
-    .attr( "transform", "translate(0,600)" );
+  var g = d3.select( "#graph" );
 
   var line = d3.svg.line()
     .x( function( d, i ) { return x( i ) } )
     .y( function( d ) { return -1 * y( d ) } );
 
-  g.append( "svg:path" ).attr( "d", line( data ) );
+  d3.select( "#graph path" ).attr( "d", line( data ) );
+
+  d3.selectAll( "#graph line, #graph text" ).remove();
 
   // x axis
   g.append( "svg:line" )
@@ -116,8 +112,33 @@ function update( ar, ma, n ) {
     .attr( "class", "yTicks" )
     .attr( "x1", x( 0 ) )
     .attr( "y1", function( d ) { return -1 * y( d ) } )
-    .attr( "x2", x( -0.01 * 100 ) )
+    .attr( "x2", x( -0.01 * n ) )
     .attr( "y2", function( d ) { return -1 * y( d ) } );
 }
 
-update( [ 1 ], [ 1 ], 100 );
+function initGraph() {
+  var graph = d3.select( "#graphdiv" )
+    .append( "svg:svg" )
+    .attr( "width", WIDTH )
+    .attr( "height", HEIGHT )
+    .append( "svg:g" )
+    .attr( "transform", "translate(0,600)" )
+    .attr( "id", "graph" )
+    .append( "svg:path" );
+}
+
+initGraph();
+update( [ 0.5 ], [ 0 ], 100 );
+
+d3.select( "#n" ).on( "keyup", function( d, i ) {
+  var value_str = d3.select( "#n" ).property( "value" );
+  var value = parseInt( value_str );
+
+  if ( isNaN( value ) || value <= 0 || value >= 10000 ) {
+    // override
+    value = 100;
+  }
+
+  update( [ 0.5 ], [ 0 ], value ); // TODO
+} );
+
