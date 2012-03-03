@@ -46,7 +46,7 @@ var WIDTH = 800;
 var HEIGHT = 600;
 var MARGIN = 20;
 
-y = d3.scale.linear().domain( [ d3.min( data ), d3.max( data ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
+y = d3.scale.linear().domain( [ d3.min( data.concat( [ 0 ] ) ), d3.max( data.concat( [ ] ) ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
 x = d3.scale.linear().domain( [ 0, 100 ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
 var graph = d3.select( "body" )
@@ -73,9 +73,9 @@ g.append( "svg:line" )
 // y axis
 g.append( "svg:line" )
   .attr( "x1", x( 0 ) )
-  .attr( "y1", -1 * y( d3.min( data ) ) )
+  .attr( "y1", -1 * y( d3.min( data.concat( [ 0 ] ) ) ) )
   .attr( "x2", x( 0 ) )
-  .attr( "y2", -1 * y( d3.max( data ) ) );
+  .attr( "y2", -1 * y( d3.max( data.concat( [ 0 ] ) ) ) );
 
 // x labels
 g.selectAll( ".xLabel" )
@@ -115,6 +115,6 @@ g.selectAll( ".yTicks" )
   .attr( "class", "yTicks" )
   .attr( "x1", x( 0 ) )
   .attr( "y1", function( d ) { return -1 * y( d ) } )
-  .attr( "x2", x( -0.1 ) )
+  .attr( "x2", x( -0.01 * 100 ) )
   .attr( "y2", function( d ) { return -1 * y( d ) } );
 
