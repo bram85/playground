@@ -55,7 +55,7 @@ var graph = d3.select( "body" )
   .attr( "height", HEIGHT );
 
 var g = graph.append( "svg:g" )
-  .attr( "transform", "translate(0,200)" );
+  .attr( "transform", "translate(0,600)" );
 
 var line = d3.svg.line()
   .x( function( d, i ) { return x( i ) } )
@@ -77,17 +77,17 @@ g.append( "svg:line" )
   .attr( "x2", x( 0 ) )
   .attr( "y2", -1 * y( d3.max( data ) ) );
 
-// x ticks
+// x labels
 g.selectAll( ".xLabel" )
   .data( x.ticks( 5 ) )
   .enter().append( "svg:text" )
   .attr( "class", "xLabel" )
   .text( String )
   .attr( "x", function( d ) { return x( d ) } )
-  .attr( "y", 0 )
+  .attr( "y", -1 * y( -0.7 ) )
   .attr( "text-anchor", "middle" );
 
-// y ticks
+// y labels
 g.selectAll( ".yLabel" )
   .data( y.ticks( 5 ) )
   .enter().append( "svg:text" )
@@ -98,6 +98,7 @@ g.selectAll( ".yLabel" )
   .attr( "text-anchor", "middle" )
   .attr( "dy", 4 );
 
+// x ticks
 g.selectAll( ".xTicks" )
   .data( x.ticks( 5 ) )
   .enter().append( "svg:line" )
@@ -107,6 +108,7 @@ g.selectAll( ".xTicks" )
   .attr( "x2", function( d ) { return x( d ); } )
   .attr( "y2", -1 * y( -0.3 ) );
 
+// y ticks
 g.selectAll( ".yTicks" )
   .data( y.ticks( 4 ) )
   .enter().append( "svg:line" )
