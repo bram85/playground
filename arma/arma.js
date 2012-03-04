@@ -46,8 +46,9 @@ function arma( ar, ma, n ) {
 
 function update( ar, ma, n ) {
   var data = arma( ar, ma, n );
+  var datazero = function() { return data.concat( [ 0 ] ); };
 
-  y = d3.scale.linear().domain( [ d3.min( data.concat( [ 0 ] ) ), d3.max( data.concat( [ ] ) ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
+  y = d3.scale.linear().domain( [ d3.min( datazero() ), d3.max( datazero() ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
   x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
   var g = d3.select( "#graph" );
@@ -70,9 +71,9 @@ function update( ar, ma, n ) {
   // y axis
   g.append( "svg:line" )
     .attr( "x1", x( 0 ) )
-    .attr( "y1", -1 * y( d3.min( data.concat( [ 0 ] ) ) ) )
+    .attr( "y1", -1 * y( d3.min( datazero() ) ) )
     .attr( "x2", x( 0 ) )
-    .attr( "y2", -1 * y( d3.max( data.concat( [ 0 ] ) ) ) );
+    .attr( "y2", -1 * y( d3.max( datazero()  ) ) );
 
   // x labels
   g.selectAll( ".xLabel" )
