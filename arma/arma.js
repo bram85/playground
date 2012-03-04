@@ -24,7 +24,7 @@ function arma( ar, ma, n ) {
     }
 
     // process MA part
-    for ( var j = 0; j < noises.length; ++j ) {
+    for ( j = 0; j < noises.length; ++j ) {
       value = value + ma[ j ] * noises[ noises.length - j - 1 ];
     }
 
@@ -133,7 +133,7 @@ update( [ 0.5 ], [ 0 ], 100 );
 
 d3.select( "#n" ).on( "keyup", function( d, i ) {
   var value_str = d3.select( "#n" ).property( "value" );
-  var value = parseInt( value_str );
+  var value = parseInt( value_str, 10 );
 
   if ( isNaN( value ) || value <= 0 || value >= 10000 ) {
     // override
