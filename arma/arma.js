@@ -54,8 +54,8 @@ function update( ar, ma, n ) {
   var g = d3.select( "#graph" );
 
   var line = d3.svg.line()
-    .x( function( d, i ) { return x( i ) } )
-    .y( function( d ) { return -1 * y( d ) } );
+    .x( function( d, i ) { return x( i ); } )
+    .y( function( d ) { return -1 * y( d ); } );
 
   d3.select( "#graph path" ).attr( "d", line( data ) );
 
@@ -81,7 +81,7 @@ function update( ar, ma, n ) {
     .enter().append( "svg:text" )
     .attr( "class", "xLabel" )
     .text( String )
-    .attr( "x", function( d ) { return x( d ) } )
+    .attr( "x", function( d ) { return x( d ); } )
     .attr( "y", -1 * y( -0.7 ) )
     .attr( "text-anchor", "middle" );
 
@@ -92,7 +92,7 @@ function update( ar, ma, n ) {
     .attr( "class", "yLabel" )
     .text( String )
     .attr( "x", 5 )
-    .attr( "y", function( d ) { return -1 * y( d ) } )
+    .attr( "y", function( d ) { return -1 * y( d ); } )
     .attr( "text-anchor", "middle" )
     .attr( "dy", 4 );
 
@@ -112,9 +112,9 @@ function update( ar, ma, n ) {
     .enter().append( "svg:line" )
     .attr( "class", "yTicks" )
     .attr( "x1", x( 0 ) )
-    .attr( "y1", function( d ) { return -1 * y( d ) } )
+    .attr( "y1", function( d ) { return -1 * y( d ); } )
     .attr( "x2", x( -0.01 * n ) )
-    .attr( "y2", function( d ) { return -1 * y( d ) } );
+    .attr( "y2", function( d ) { return -1 * y( d ); } );
 }
 
 function initGraph() {
