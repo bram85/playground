@@ -1,11 +1,10 @@
-/**
- * Produces n values according to the ARMA model.
- */
-
 var WIDTH = 800;
 var HEIGHT = 600;
 var MARGIN = 20;
 
+/**
+ * Produces n values according to the ARMA model.
+ */
 function arma( ar, ma, n ) {
   var result = [];
 
