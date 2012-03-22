@@ -81,7 +81,7 @@ function update( ar, ma, n ) {
     .attr( "class", "xLabel" )
     .text( String )
     .attr( "x", function( d ) { return x( d ); } )
-    .attr( "y", -1 * y( -0.7 ) )
+    .attr( "y", -1 * y( 0 ) + 25 )
     .attr( "text-anchor", "middle" );
 
   // y labels
@@ -103,7 +103,7 @@ function update( ar, ma, n ) {
     .attr( "x1", function( d ) { return x( d ); } )
     .attr( "y1", -1 * y( 0 ) )
     .attr( "x2", function( d ) { return x( d ); } )
-    .attr( "y2", -1 * y( -0.3 ) );
+    .attr( "y2", -1 * y( 0 ) + 10 );
 
   // y ticks
   g.selectAll( ".yTicks" )
@@ -112,7 +112,7 @@ function update( ar, ma, n ) {
     .attr( "class", "yTicks" )
     .attr( "x1", x( 0 ) )
     .attr( "y1", function( d ) { return -1 * y( d ); } )
-    .attr( "x2", x( -0.01 * n ) )
+    .attr( "x2", x( 0 ) - 10 )
     .attr( "y2", function( d ) { return -1 * y( d ); } );
 }
 
