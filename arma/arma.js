@@ -169,8 +169,7 @@ function addField( type, defaultValue ) {
 }
 
 function onValueChanged() {
-  var n_str = d3.select( "#n" ).property( "value" );
-  var n = parseInt( n_str, 10 );
+  var n = parseInt( d3.select( "#n" ).property( "value" ), 10 );
 
   if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
     // override
