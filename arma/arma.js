@@ -143,10 +143,32 @@ function getParams( type ) {
   return values;
 }
 
-initGraph();
-update( [ 0.5 ], [ 0 ], 100 );
+function addField( type, defaultValue ) {
+  if ( type === "ar" || type === "ma" ) {
+    var list = d3.select( "ol#" + type + "block" );
 
-d3.selectAll( ".param" ).on( "keyup", function( d, i ) {
+    if ( defaultValue == undefined ) {
+      defaultValue = 0.0;
+    }
+
+    // unregister event for the last input field
+    list.selectAll( "li:last-child > input" ).on( "keyup.last", null );
+
+    // insert new input to the list
+    list
+      .append( "li" )
+      .append( "input" )
+      .property( "value", defaultValue )
+      .attr( "type", "input" )
+      .classed( "param " + type + "input", 1 )
+      .on( "keyup.last", function() {
+        addField( type, 0.0 );
+      } )
+      .on( "keyup", onValueChanged );
+  }
+}
+
+function onValueChanged() {
   var n_str = d3.select( "#n" ).property( "value" );
   var n = parseInt( n_str, 10 );
 
@@ -156,5 +178,14 @@ d3.selectAll( ".param" ).on( "keyup", function( d, i ) {
   }
 
   update( getParams( "ar" ), getParams( "ma" ), n );
-} );
+}
 
+initGraph();
+
+addField( "ar", 0.5 );
+addField( "ar", 0.0 );
+addField( "ma", 0.0 );
+
+update( [ 0.5 ], [ 0 ], 100 );
+
+d3.select( "#n" ).on( "keyup", onValueChanged );
