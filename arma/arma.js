@@ -127,18 +127,34 @@ function initGraph() {
     .append( "svg:path" );
 }
 
+function getParams( type ) {
+  var values = [];
+
+  if ( type === "ar" || type === "ma" ) {
+    d3.selectAll( "." + type + "input" ).each( function( d, i ) {
+      var value = parseFloat( d3.select( this ).property( "value" ) );
+
+      if ( !isNaN( value ) ) {
+        values.push( value );
+      }
+    } );
+  }
+
+  return values;
+}
+
 initGraph();
 update( [ 0.5 ], [ 0 ], 100 );
 
-d3.select( "#n" ).on( "keyup", function( d, i ) {
-  var value_str = d3.select( "#n" ).property( "value" );
-  var value = parseInt( value_str, 10 );
+d3.selectAll( ".param" ).on( "keyup", function( d, i ) {
+  var n_str = d3.select( "#n" ).property( "value" );
+  var n = parseInt( n_str, 10 );
 
-  if ( isNaN( value ) || value <= 0 || value >= 10000 ) {
+  if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
     // override
-    value = 100;
+    n = 100;
   }
 
-  update( [ 0.5 ], [ 0 ], value ); // TODO
+  update( getParams( "ar" ), getParams( "ma" ), n );
 } );
 

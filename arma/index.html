@@ -10,7 +10,19 @@
     <div id="controlpanel">
       <!-- TODO -->
       <form>
-        n=<input id="n" value="100" type="input" />
+        <div id="nblock">
+          n=<input id="n" class="param" value="100" type="input" />
+        </div>
+        AR:
+        <ol id="arblock" />
+          <li><input id="ar1" class="param arinput" value="0.5" type="input" /></li>
+          <li><input id="ar2" class="param arinput" value="" type="input" /></li>
+        </ol>
+        MA:
+        <ol id="mablock" />
+          <li><input id="ma1" class="param mainput" value="0" type="input" /></li>
+          <li><input id="ma2" class="param mainput" value="" type="input" /></li>
+        </ol>
       </form>
     </div>
     <script type="text/javascript" src="arma.js"></script>
