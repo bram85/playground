@@ -122,7 +122,7 @@ function initGraph() {
     .attr( "width", WIDTH )
     .attr( "height", HEIGHT )
     .append( "svg:g" )
-    .attr( "transform", "translate(0,600)" )
+    .attr( "transform", "translate(0," + HEIGHT + ")" )
     .attr( "id", "graph" )
     .append( "svg:path" );
 }
