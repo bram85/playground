@@ -47,73 +47,42 @@ function update( ar, ma, n ) {
   var data = arma( ar, ma, n );
   var datazero = function() { return data.concat( [ 0 ] ); };
 
-  y = d3.scale.linear().domain( [ d3.min( datazero() ), d3.max( datazero() ) ] ).range( [ 0 + MARGIN, HEIGHT - MARGIN ] );
+  y = d3.scale.linear().domain( [ d3.max( datazero() ), d3.min( datazero() ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
   x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
   var g = d3.select( "#graph" );
 
   var line = d3.svg.line()
     .x( function( d, i ) { return x( i ); } )
-    .y( function( d ) { return -1 * y( d ); } );
+    .y( function( d ) { return y( d ); } );
 
   d3.select( "#graph path" ).attr( "d", line( data ) );
 
-  d3.selectAll( "#graph line, #graph text" ).remove();
+  d3.selectAll( "#graph line, #graph text, #graph .axis" ).remove();
 
-  // x axis
-  g.append( "svg:line" )
-    .attr( "x1", x( 0 ) )
-    .attr( "y1", -1 * y( 0 ) )
-    .attr( "x2", x( n ) )
-    .attr( "y2", -1 * y( 0 ) );
+  var xAxis = d3.svg.axis()
+    .scale( x )
+    .tickSize( 10 )
+    .ticks( 5 )
+    .orient( "bottom" );
 
   // y axis
-  g.append( "svg:line" )
-    .attr( "x1", x( 0 ) )
-    .attr( "y1", -1 * y( d3.min( datazero() ) ) )
-    .attr( "x2", x( 0 ) )
-    .attr( "y2", -1 * y( d3.max( datazero()  ) ) );
+  var yAxis = d3.svg.axis()
+    .scale( y )
+    .tickSize( 10 )
+    .ticks( 5 )
+    .orient( "left" );
 
-  // x labels
-  g.selectAll( ".xLabel" )
-    .data( x.ticks( 5 ) )
-    .enter().append( "svg:text" )
-    .attr( "class", "xLabel" )
-    .text( String )
-    .attr( "x", function( d ) { return x( d ); } )
-    .attr( "y", -1 * y( 0 ) + 25 )
-    .attr( "text-anchor", "middle" );
+  // x axis
+  g.append( "svg:g" )
+    .classed( "axis", 1 )
+    .attr( "transform", "translate( 0," + y( 0 ) + ")" )
+    .call( xAxis );
 
-  // y labels
-  g.selectAll( ".yLabel" )
-    .data( y.ticks( 5 ) )
-    .enter().append( "svg:text" )
-    .attr( "class", "yLabel" )
-    .text( String )
-    .attr( "x", 5 )
-    .attr( "y", function( d ) { return -1 * y( d ); } )
-    .attr( "text-anchor", "middle" )
-    .attr( "dy", 4 );
-
-  // x ticks
-  g.selectAll( ".xTicks" )
-    .data( x.ticks( 5 ) )
-    .enter().append( "svg:line" )
-    .attr( "class", "xTicks" )
-    .attr( "x1", function( d ) { return x( d ); } )
-    .attr( "y1", -1 * y( 0 ) )
-    .attr( "x2", function( d ) { return x( d ); } )
-    .attr( "y2", -1 * y( 0 ) + 10 );
-
-  // y ticks
-  g.selectAll( ".yTicks" )
-    .data( y.ticks( 4 ) )
-    .enter().append( "svg:line" )
-    .attr( "class", "yTicks" )
-    .attr( "x1", x( 0 ) )
-    .attr( "y1", function( d ) { return -1 * y( d ); } )
-    .attr( "x2", x( 0 ) - 10 )
-    .attr( "y2", function( d ) { return -1 * y( d ); } );
+  g.append( "svg:g" )
+    .classed( "axis", 1 )
+    .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
+    .call( yAxis );
 }
 
 function initGraph() {
@@ -122,7 +91,6 @@ function initGraph() {
     .attr( "width", WIDTH )
     .attr( "height", HEIGHT )
     .append( "svg:g" )
-    .attr( "transform", "translate(0," + HEIGHT + ")" )
     .attr( "id", "graph" )
     .append( "svg:path" );
 }
