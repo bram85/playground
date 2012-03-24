@@ -72,6 +72,7 @@ var arma = (function() {
 
     d3.selectAll( "#graph line, #graph text, #graph .axis" ).remove();
 
+    // x axis
     var xAxis = d3.svg.axis()
       .scale( x )
       .tickSize( 10 )
@@ -85,7 +86,6 @@ var arma = (function() {
       .ticks( 5 )
       .orient( "left" );
 
-    // x axis
     g.append( "svg:g" )
       .classed( "axis", 1 )
       .attr( "transform", "translate( 0," + y( 0 ) + ")" )
@@ -95,16 +95,6 @@ var arma = (function() {
       .classed( "axis", 1 )
       .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
       .call( yAxis );
-  }
-
-  function initGraph() {
-    var graph = d3.select( "#graphdiv" )
-      .append( "svg:svg" )
-      .attr( "width", WIDTH )
-      .attr( "height", HEIGHT )
-      .append( "svg:g" )
-      .attr( "id", "graph" )
-      .append( "svg:path" );
   }
 
   function getParams( type ) {
@@ -153,7 +143,13 @@ var arma = (function() {
     eventTimeoutHandle = setTimeout( update, 500 );
   }
 
-  initGraph();
+  d3.select( "#graphdiv" )
+      .append( "svg:svg" )
+      .attr( "width", WIDTH )
+      .attr( "height", HEIGHT )
+      .append( "svg:g" )
+      .attr( "id", "graph" )
+      .append( "svg:path" );
 
   addField( "ar", 0.5 );
   addField( "ar", 0.0 );
