@@ -1,6 +1,6 @@
 var WIDTH = 800;
 var HEIGHT = 600;
-var MARGIN = 20;
+var MARGIN = 40;
 
 /**
  * Produces n values according to the ARMA model.
