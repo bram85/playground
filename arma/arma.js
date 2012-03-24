@@ -3,8 +3,6 @@ var arma = (function() {
   var HEIGHT = 600;
   var MARGIN = 40;
 
-  var eventTimeoutHandle;
-
   /**
    * Produces n values according to the ARMA model.
    */
@@ -138,10 +136,14 @@ var arma = (function() {
     }
   }
 
-  function onValueChanged() {
-    clearTimeout( eventTimeoutHandle );
-    eventTimeoutHandle = setTimeout( update, 500 );
-  }
+  var onValueChanged = function() {
+    var eventTimeoutHandle;
+
+    return function() {
+      clearTimeout( eventTimeoutHandle );
+      eventTimeoutHandle = setTimeout( update, 500 );
+    };
+  }();
 
   d3.select( "#graphdiv" )
       .append( "svg:svg" )
