@@ -2,6 +2,8 @@ var WIDTH = 800;
 var HEIGHT = 600;
 var MARGIN = 40;
 
+var eventTimeoutHandle;
+
 /**
  * Produces n values according to the ARMA model.
  */
@@ -43,7 +45,16 @@ function arma( ar, ma, n ) {
   return result;
 }
 
-function update( ar, ma, n ) {
+function update() {
+  var ar = getParams( "ar" );
+  var ma = getParams( "ma" );
+  var n = parseInt( d3.select( "#n" ).property( "value" ), 10 );
+
+  if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
+    // override
+    n = 100;
+  }
+
   var data = arma( ar, ma, n );
   var datazero = function() { return data.concat( [ 0 ] ); };
 
@@ -137,14 +148,8 @@ function addField( type, defaultValue ) {
 }
 
 function onValueChanged() {
-  var n = parseInt( d3.select( "#n" ).property( "value" ), 10 );
-
-  if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
-    // override
-    n = 100;
-  }
-
-  update( getParams( "ar" ), getParams( "ma" ), n );
+  clearTimeout( eventTimeoutHandle );
+  eventTimeoutHandle = setTimeout( update, 500 );
 }
 
 initGraph();
@@ -153,6 +158,6 @@ addField( "ar", 0.5 );
 addField( "ar", 0.0 );
 addField( "ma", 0.0 );
 
-update( [ 0.5 ], [ 0 ], 100 );
+update();
 
 d3.select( "#n" ).on( "keyup", onValueChanged );
