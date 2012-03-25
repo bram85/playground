@@ -3,8 +3,6 @@ var arma = (function() {
   var HEIGHT = 600;
   var MARGIN = 40;
 
-  var xAxis = null;
-
   /**
    * Produces n values according to the ARMA model.
    */
@@ -46,67 +44,71 @@ var arma = (function() {
     return result;
   }
 
-  function update() {
-    var ar = getParams( "ar" );
-    var ma = getParams( "ma" );
-    var n = parseInt( d3.select( "#n" ).property( "value" ), 10 );
+  var update = function() {
+    var xAxis = null;
 
-    if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
-      // override
-      n = 100;
-    }
+    return function() {
+      var ar = getParams( "ar" );
+      var ma = getParams( "ma" );
+      var n = parseInt( d3.select( "#n" ).property( "value" ), 10 );
 
-    var data = generateValues( ar, ma, n );
-    var datazero = function() { return data.concat( [ 0 ] ); };
+      if ( isNaN( n ) || n <= 0 || n >= 10000 ) {
+        // override
+        n = 100;
+      }
 
-    y = d3.scale.linear().domain( [ d3.max( datazero() ), d3.min( datazero() ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
-    x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
+      var data = generateValues( ar, ma, n );
+      var datazero = function() { return data.concat( [ 0 ] ); };
 
-    var g = d3.select( "#graph" );
+      y = d3.scale.linear().domain( [ d3.max( datazero() ), d3.min( datazero() ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
+      x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
-    var line = d3.svg.line()
-      .x( function( d, i ) { return x( i ); } )
-      .y( function( d ) { return y( d ); } );
+      var g = d3.select( "#graph" );
 
-    d3.select( "#graph path" ).attr( "d", line( data ) );
+      var line = d3.svg.line()
+        .x( function( d, i ) { return x( i ); } )
+        .y( function( d ) { return y( d ); } );
 
-    var setXAxis = function() {
-      xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
-    };
+      d3.select( "#graph path" ).attr( "d", line( data ) );
 
-    d3.selectAll( "#graph line, #graph text, #graph #y-axis" ).remove();
-    d3.select( "#graph #x-axis" ).transition()
-      .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
-      .each( "start", function() {
+      var setXAxis = function() {
+        xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
+      };
+
+      d3.selectAll( "#graph line, #graph text, #graph #y-axis" ).remove();
+      d3.select( "#graph #x-axis" ).transition()
+        .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
+        .each( "start", function() {
+          setXAxis();
+          d3.select( this ).call( xAxis );
+        } );
+
+      // x axis
+      if ( xAxis === null ) {
+        xAxis = d3.svg.axis();
         setXAxis();
-        d3.select( this ).call( xAxis );
-      } );
 
-    // x axis
-    if ( xAxis === null ) {
-      xAxis = d3.svg.axis();
-      setXAxis();
+        g.append( "svg:g" )
+          .classed( "axis", 1 )
+          .attr( "id", "x-axis" )
+          .attr( "transform", "translate( 0," + y( 0 ) + ")" )
+          .call( xAxis );
+      }
+
+      // y axis
+      var yAxis = d3.svg.axis()
+        .scale( y )
+        .tickSize( 10 )
+        .ticks( 5 )
+        .orient( "left" );
 
       g.append( "svg:g" )
         .classed( "axis", 1 )
-        .attr( "id", "x-axis" )
-        .attr( "transform", "translate( 0," + y( 0 ) + ")" )
-        .call( xAxis );
-    }
-
-    // y axis
-    var yAxis = d3.svg.axis()
-      .scale( y )
-      .tickSize( 10 )
-      .ticks( 5 )
-      .orient( "left" );
-
-    g.append( "svg:g" )
-      .classed( "axis", 1 )
-      .attr( "id", "y-axis" )
-      .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
-      .call( yAxis );
-  }
+        .attr( "id", "y-axis" )
+        .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
+        .call( yAxis );
+    };
+  }();
 
   function getParams( type ) {
     var values = [];
