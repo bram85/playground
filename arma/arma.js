@@ -57,31 +57,36 @@ var arma = (function() {
         n = 100;
       }
 
+      // remove old elements, they will be recreated next
+      d3.selectAll( "#plot, #y-axis" ).remove();
+
       var data = generateValues( ar, ma, n );
       var datazero = function() { return data.concat( [ 0 ] ); }();
 
       y = d3.scale.linear().domain( [ d3.max( datazero ), d3.min( datazero ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
       x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
-      var g = d3.select( "#graph" );
-
       var line = d3.svg.line()
         .x( function( d, i ) { return x( i ); } )
         .y( function( d ) { return y( d ); } );
 
-      d3.select( "#graph path" ).attr( "d", line( data ) );
+      // set the plot
+      d3.select( "#graph" ).append( "svg:path" )
+        .attr( "id", "plot" )
+        .attr( "d", line( data ) );
 
       var setXAxis = function() {
         xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
       };
 
-      d3.selectAll( "#graph line, #graph text, #graph #y-axis" ).remove();
-      d3.select( "#graph #x-axis" ).transition()
+      d3.select( "#x-axis" ).transition()
         .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
         .each( "start", function() {
           setXAxis();
           d3.select( this ).call( xAxis );
         } );
+
+      var g = d3.select( "#graph" );
 
       // x axis
       if ( xAxis === null ) {
@@ -175,7 +180,8 @@ var arma = (function() {
       .attr( "height", HEIGHT )
       .append( "svg:g" )
       .attr( "id", "graph" )
-      .append( "svg:path" );
+      .append( "svg:path" )
+      .attr( "id", "plot" );
 
   addField( "ar", 0.5 );
   addField( "ar", 0.0 );
