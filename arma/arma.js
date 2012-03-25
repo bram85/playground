@@ -3,6 +3,8 @@ var arma = (function() {
   var HEIGHT = 600;
   var MARGIN = 40;
 
+  var xAxis = null;
+
   /**
    * Produces n values according to the ARMA model.
    */
@@ -68,14 +70,32 @@ var arma = (function() {
 
     d3.select( "#graph path" ).attr( "d", line( data ) );
 
-    d3.selectAll( "#graph line, #graph text, #graph .axis" ).remove();
+    d3.selectAll( "#graph line, #graph text, #graph #y-axis" ).remove();
+    d3.select( "#graph #x-axis" ).transition()
+      .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
+      .each( "start", function() {
+        xAxis
+          .scale( x )
+          .tickSize( 10 )
+          .ticks( 5 );
+
+        d3.select( this ).call( xAxis );
+      } );
 
     // x axis
-    var xAxis = d3.svg.axis()
-      .scale( x )
-      .tickSize( 10 )
-      .ticks( 5 )
-      .orient( "bottom" );
+    if ( xAxis === null ) {
+      xAxis = d3.svg.axis()
+        .scale( x )
+        .tickSize( 10 )
+        .ticks( 5 )
+        .orient( "bottom" );
+
+      g.append( "svg:g" )
+        .classed( "axis", 1 )
+        .attr( "id", "x-axis" )
+        .attr( "transform", "translate( 0," + y( 0 ) + ")" )
+        .call( xAxis );
+    }
 
     // y axis
     var yAxis = d3.svg.axis()
@@ -86,11 +106,7 @@ var arma = (function() {
 
     g.append( "svg:g" )
       .classed( "axis", 1 )
-      .attr( "transform", "translate( 0," + y( 0 ) + ")" )
-      .call( xAxis );
-
-    g.append( "svg:g" )
-      .classed( "axis", 1 )
+      .attr( "id", "y-axis" )
       .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
       .call( yAxis );
   }
