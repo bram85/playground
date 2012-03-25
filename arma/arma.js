@@ -62,7 +62,7 @@ var arma = (function() {
       d3.selectAll( "#plot" ).remove();
 
       var data = generateValues( ar, ma, n );
-      var datazero = function() { return data.concat( [ 0 ] ); }();
+      var datazero = data.concat( [ 0 ] );
 
       y = d3.scale.linear().domain( [ d3.max( datazero ), d3.min( datazero ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
       x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
