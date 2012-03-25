@@ -58,8 +58,15 @@ var arma = (function() {
         n = 100;
       }
 
-      // remove old elements, they will be recreated next
-      d3.selectAll( "#plot" ).remove();
+      // fade out old plot first.
+      d3.selectAll( "#plot" )
+        .transition()
+        .style( "stroke", "#c0c0c0" )
+        .duration( 100 )
+        .transition()
+        .style( "stroke", "white" )
+        .duration( 1000 )
+        .remove();
 
       var data = generateValues( ar, ma, n );
       var datazero = data.concat( [ 0 ] );
