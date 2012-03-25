@@ -140,8 +140,17 @@ var arma = (function() {
     var eventTimeoutHandle;
 
     return function() {
-      clearTimeout( eventTimeoutHandle );
-      eventTimeoutHandle = setTimeout( update, 500 );
+      var key = d3.event.which;
+
+      if ( ( key >= 48 && key <= 57 ) || ( key >= 96 && key <= 105 ) || key == 8 || key == 190 ) {
+        clearTimeout( eventTimeoutHandle );
+        eventTimeoutHandle = setTimeout( update, 500 );
+      } else {
+        // restore the value using parseFloat
+        var field = d3.select( this );
+        var value = parseFloat( field.property( "value" ) );
+        field.property( "value", value );
+      }
     };
   }();
 
