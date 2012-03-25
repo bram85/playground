@@ -67,15 +67,6 @@ var arma = (function() {
       y = d3.scale.linear().domain( [ d3.max( datazero ), d3.min( datazero ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
       x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
 
-      var line = d3.svg.line()
-        .x( function( d, i ) { return x( i ); } )
-        .y( function( d ) { return y( d ); } );
-
-      // set the plot
-      d3.select( "#graph" ).append( "svg:path" )
-        .attr( "id", "plot" )
-        .attr( "d", line( data ) );
-
       var setAxes = function() {
         xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
         yAxis.scale( y ).tickSize( 10 ).ticks( 5 ).orient( "left" );
@@ -116,6 +107,15 @@ var arma = (function() {
           .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
           .call( yAxis );
       }
+
+      var line = d3.svg.line()
+        .x( function( d, i ) { return x( i ); } )
+        .y( function( d ) { return y( d ); } );
+
+      // set the plot
+      d3.select( "#graph" ).insert( "svg:path", "#x-axis" )
+        .attr( "id", "plot" )
+        .attr( "d", line( data ) );
     };
   }();
 
