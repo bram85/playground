@@ -70,25 +70,22 @@ var arma = (function() {
 
     d3.select( "#graph path" ).attr( "d", line( data ) );
 
+    var setXAxis = function() {
+      xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
+    };
+
     d3.selectAll( "#graph line, #graph text, #graph #y-axis" ).remove();
     d3.select( "#graph #x-axis" ).transition()
       .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
       .each( "start", function() {
-        xAxis
-          .scale( x )
-          .tickSize( 10 )
-          .ticks( 5 );
-
+        setXAxis();
         d3.select( this ).call( xAxis );
       } );
 
     // x axis
     if ( xAxis === null ) {
-      xAxis = d3.svg.axis()
-        .scale( x )
-        .tickSize( 10 )
-        .ticks( 5 )
-        .orient( "bottom" );
+      xAxis = d3.svg.axis();
+      setXAxis();
 
       g.append( "svg:g" )
         .classed( "axis", 1 )
