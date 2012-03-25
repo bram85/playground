@@ -46,6 +46,7 @@ var arma = (function() {
 
   var update = function() {
     var xAxis = null;
+    var yAxis = null;
 
     return function() {
       var ar = getParams( "ar" );
@@ -58,7 +59,7 @@ var arma = (function() {
       }
 
       // remove old elements, they will be recreated next
-      d3.selectAll( "#plot, #y-axis" ).remove();
+      d3.selectAll( "#plot" ).remove();
 
       var data = generateValues( ar, ma, n );
       var datazero = function() { return data.concat( [ 0 ] ); }();
@@ -75,43 +76,46 @@ var arma = (function() {
         .attr( "id", "plot" )
         .attr( "d", line( data ) );
 
-      var setXAxis = function() {
+      var setAxes = function() {
         xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
+        yAxis.scale( y ).tickSize( 10 ).ticks( 5 ).orient( "left" );
       };
 
       d3.select( "#x-axis" ).transition()
         .attr( "transform", "translate( 0, " + y( 0 ) + ")" )
         .each( "start", function() {
-          setXAxis();
+          setAxes();
           d3.select( this ).call( xAxis );
+        } );
+
+      d3.select( "#y-axis" ).transition()
+        .attr( "transform", "translate(" + x( 0 ) + ",0)" )
+        .each( "start", function() {
+          setAxes();
+          d3.select( this ).call( yAxis );
         } );
 
       var g = d3.select( "#graph" );
 
-      // x axis
+      // axes
       if ( xAxis === null ) {
         xAxis = d3.svg.axis();
-        setXAxis();
+        yAxis = d3.svg.axis();
+
+        setAxes();
 
         g.append( "svg:g" )
           .classed( "axis", 1 )
           .attr( "id", "x-axis" )
           .attr( "transform", "translate( 0," + y( 0 ) + ")" )
           .call( xAxis );
+
+        g.append( "svg:g" )
+          .classed( "axis", 1 )
+          .attr( "id", "y-axis" )
+          .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
+          .call( yAxis );
       }
-
-      // y axis
-      var yAxis = d3.svg.axis()
-        .scale( y )
-        .tickSize( 10 )
-        .ticks( 5 )
-        .orient( "left" );
-
-      g.append( "svg:g" )
-        .classed( "axis", 1 )
-        .attr( "id", "y-axis" )
-        .attr( "transform", "translate(" + x( 0 ) + "," + 0 + ")" )
-        .call( yAxis );
     };
   }();
 
