@@ -61,11 +61,9 @@ var arma = (function() {
       // fade out old plot first.
       d3.selectAll( "#plot" )
         .transition()
-        .style( "stroke", "#c0c0c0" )
-        .duration( 100 )
-        .transition()
         .style( "stroke", "white" )
-        .duration( 1000 )
+        .duration( 1500 )
+        .ease( "cubic-out" )
         .remove();
 
       var data = generateValues( ar, ma, n );
