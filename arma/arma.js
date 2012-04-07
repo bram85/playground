@@ -1,7 +1,8 @@
 var arma = (function() {
   var WIDTH = 800;
   var HEIGHT = 600;
-  var MARGIN = 40;
+  var LEFTMARGIN = 70;
+  var MARGIN = 20;
 
   /**
    * Produces n values according to the ARMA model.
@@ -61,12 +62,21 @@ var arma = (function() {
       var data = generateValues( ar, ma, n );
       var datazero = data.concat( [ 0 ] );
 
-      y = d3.scale.linear().domain( [ d3.max( datazero ), d3.min( datazero ) ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
-      x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + MARGIN, WIDTH - MARGIN ] );
+      var min = d3.min( datazero );
+      var max = d3.max( datazero );
+
+      y = d3.scale.linear().domain( [ max, min ] ).range( [ 0 + MARGIN, HEIGHT - 2 * MARGIN ] );
+      x = d3.scale.linear().domain( [ 0, n ] ).range( [ 0 + LEFTMARGIN, WIDTH - MARGIN ] );
 
       var setAxes = function() {
         xAxis.scale( x ).tickSize( 10 ).ticks( 5 ).orient( "bottom" );
         yAxis.scale( y ).tickSize( 10 ).ticks( 5 ).orient( "left" );
+
+        if ( min < -1000000 || max > 1000000 ) {
+          yAxis.tickFormat( d3.format( "2.1e" ) ); // exponential notation
+        } else {
+          yAxis.tickFormat( null ); // default format
+        }
       };
 
       d3.select( "#x-axis" ).transition()
