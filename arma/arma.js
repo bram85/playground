@@ -58,14 +58,6 @@ var arma = (function() {
         n = 100;
       }
 
-      // fade out old plot first.
-      d3.selectAll( "#plot" )
-        .transition()
-        .style( "stroke", "white" )
-        .duration( 1500 )
-        .ease( "cubic-out" )
-        .remove();
-
       var data = generateValues( ar, ma, n );
       var datazero = data.concat( [ 0 ] );
 
@@ -93,12 +85,15 @@ var arma = (function() {
 
       var g = d3.select( "#graph" );
 
-      // axes
+      // axes and initial plot
       if ( xAxis === null ) {
         xAxis = d3.svg.axis();
         yAxis = d3.svg.axis();
 
         setAxes();
+
+        g.append( "svg:path" )
+          .attr( "id", "plot" );
 
         g.append( "svg:g" )
           .classed( "axis", 1 )
@@ -113,14 +108,16 @@ var arma = (function() {
           .call( yAxis );
       }
 
+      // draw plot
       var line = d3.svg.line()
         .x( function( d, i ) { return x( i ); } )
         .y( function( d ) { return y( d ); } );
 
-      // set the plot
-      d3.select( "#graph" ).insert( "svg:path", "#x-axis" )
-        .attr( "id", "plot" )
-        .attr( "d", line( data ) );
+      d3.selectAll( "#plot" )
+        .transition()
+        .attr( "d", line( data ) )
+        .duration( 500 )
+        .ease( "cubic-out" );
     };
   }();
 
