@@ -1,3 +1,7 @@
+#graphdiv {
+  float: left;
+}
+
 path {
   stroke-width: 2;
   stroke: steelblue;

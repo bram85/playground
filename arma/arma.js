@@ -137,30 +137,57 @@ var arma = (function() {
     return values;
   }
 
-  function addField( type, defaultValue ) {
-    if ( type === "ar" || type === "ma" ) {
-      var list = d3.select( "ol#" + type + "block" );
+  var addField = function() {
+    var numAR = 0;
+    var numMA = 0;
 
+    return function( type, defaultValue ) {
       if ( defaultValue == undefined ) {
         defaultValue = 0.0;
       }
 
-      // unregister event for the last input field
-      list.selectAll( "li:last-child > input" ).on( "keyup.last", null );
+      // see if a new row has to be added
+      if ( ( type === "ar" && numAR >= numMA ) || ( type === "ma" && numMA >= numAR ) ) {
+        var row = d3.select( "#params > tbody" ).append( "tr" );
+        row.append( "td" );
+        row.append( "td" );
+      }
 
-      // insert new input to the list
-      list
-        .append( "li" )
-        .append( "input" )
-        .property( "value", defaultValue )
-        .attr( "type", "input" )
+      var cell = null;
+
+      // compose a base selector
+      var base = "#params tr:nth-of-type(%1) td:nth-of-type(%2)";
+      base = base.replace( /%2/, type === "ar" ? 1 : 2 );
+
+      // lookup cell
+      // note that 4 below is the offset (there are already 3 rows in the table).
+      if ( type === "ar" ) {
+        if ( numAR > 0 ) {
+          // unregister event for last input
+          d3.select( base.replace( /%1/, numAR + 3 ) + " > input" ).on( "keyup.last", null );
+        }
+        cell = d3.select( base.replace( /%1/, numAR + 4 ) );
+        numAR++;
+        cell.text( numAR + '. ' );
+      } else {
+        if ( numMA > 0 ) {
+          // unregister event for last input
+          d3.select( base.replace( /%1/, numMA + 3 ) + " > input" ).on( "keyup.last", null );
+        }
+        cell = d3.select( base.replace( /%1/, numMA + 4 ) );
+        numMA++;
+        cell.text( numMA + '. ' );
+      }
+
+      cell.append( "input" )
         .classed( "param " + type + "input", 1 )
+        .property( "value", defaultValue )
         .on( "keyup.last", function() {
           addField( type, 0.0 );
         } )
         .on( "keyup", onValueChanged );
-    }
-  }
+    };
+  }();
 
   var onValueChanged = function() {
     var eventTimeoutHandle;

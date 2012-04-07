@@ -9,15 +9,11 @@
     <div id="graphdiv"></div>
     <div id="controlpanel">
       <form>
-        <div id="nblock">
-          n=<input id="n" class="param" value="100" type="input" />
-        </div>
-        AR:
-        <ol id="arblock" />
-        </ol>
-        MA:
-        <ol id="mablock" />
-        </ol>
+        <table id="params">
+          <tr><td class="tableheader" colspan="2">n</tr>
+          <tr><td colspan="2"><input id="n" class="param" value="100" type="text" /></td></tr>
+          <tr><td class="tableheader">AR</td><td class="tableheader">MA</td></tr>
+        </table>
       </form>
     </div>
     <script type="text/javascript" src="arma.js"></script>
