@@ -14,5 +14,6 @@
   "permissions": [
     "http://*/*",
     "tabs"
-  ]
+  ],
+  "update_url": "https://raw.github.com/bram85/playground/master/nineteen/update.xml"
 }
