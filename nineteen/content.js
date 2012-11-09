@@ -14,6 +14,9 @@ function wordList( pText ) {
   var re = new RegExp( "[a-zA-Z]{" + MATCHLEN + ",}", "g" );
   var ij = new RegExp( "ij", "gi" );
 
+  // first get rid of as many concatenated words as possible
+  pText = pText.replace( new RegExp( "([a-z])([A-Z])", "g" ), "$1 $2" );
+
   var matches = pText.match( re );
 
   var result = [];
