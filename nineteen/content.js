@@ -2,13 +2,6 @@ var Nineteen = function() {
 
 var MATCHLEN = 19;
 
-function match( pWord ) {
-  // lange ij: replace ij with i for proper character count
-  var normalized = pWord.replace( new RegExp( "ij", "gi" ), "i" );
-
-  return normalized.length === MATCHLEN;
-}
-
 function pruneTag( pElement, pTag ) {
   var elements = pElement.getElementsByTagName( pTag );
   for ( var i = elements.length - 1; i >= 0; --i ) {
