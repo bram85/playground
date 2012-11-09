@@ -1,4 +1,4 @@
-var words = chrome.extension.getBackgroundPage().words;
+var words = chrome.extension.getBackgroundPage().getActiveWords();
 
 var list = document.createElement( "ul" );
 
