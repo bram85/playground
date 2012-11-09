@@ -1,6 +1,6 @@
 {
   "name": "Nineteen",
-  "version": "0.1",
+  "version": "0.2",
   "manifest_version": 2,
   "description": "Finds words of 19 characters long in Dutch webpages.",
   "background": {
