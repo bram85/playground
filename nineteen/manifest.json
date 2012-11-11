@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Finds words of 19 characters long in Dutch webpages.",
   "background": {
-    "scripts": [ "listeners.js" ],
+    "scripts": [ "background.js" ],
     "persistent": false
   },
   "browser_action": {
