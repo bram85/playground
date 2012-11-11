@@ -4,7 +4,7 @@ var getActiveWords = function() {
   var allWords = {};
 
   chrome.tabs.onUpdated.addListener( function( pTabID, pChangeInfo, pTab ) {
-    if ( pChangeInfo.status === "complete" ) {
+    if ( pChangeInfo.status === "complete" && pTab.url.match( '^http:' ) ) {
       chrome.tabs.detectLanguage( pTabID, function( pLanguage ) {
         if ( pLanguage === "nl" ) {
           // insert content script
