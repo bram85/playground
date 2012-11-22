@@ -2,6 +2,7 @@ var getActiveWords = function() {
   // a dictionary which contains all words on open tabs
   var activeWords = [];
   var allWords = {};
+  var blacklist = [];
 
   chrome.tabs.onUpdated.addListener( function( pTabID, pChangeInfo, pTab ) {
     if ( pChangeInfo.status === "complete" && pTab.url.match( '^http:' ) ) {
@@ -27,6 +28,11 @@ var getActiveWords = function() {
   }
 
   chrome.extension.onMessage.addListener( function( pMessage, pSender ) {
+    // filter words using blacklist
+    pMessage = pMessage.filter( function( pWord ) {
+      return blacklist.indexOf( pWord ) === -1;
+    } );
+
     if ( pMessage.length > 0 ) {
       var tabID = pSender.tab.id;
 
@@ -47,6 +53,22 @@ var getActiveWords = function() {
   chrome.tabs.onActivated.addListener( function( pInfo ) {
     setActiveWords( pInfo.tabId );
   } );
+
+  // load blacklist
+  var xhr = new XMLHttpRequest();
+  xhr.open( "GET", "blacklist.json" );
+  xhr.onreadystatechange = function() {
+    if ( xhr.readyState === 4 ) {
+      console.log( "Loading blacklist." );
+      try {
+        blacklist = JSON.parse( xhr.responseText );
+        blacklist = blacklist.bl;
+      } catch ( e ) {
+        console.error( "Error could not load blacklist: " + e.message );
+      }
+    }
+  }
+  xhr.send();
 
   return function() {
     return activeWords;
