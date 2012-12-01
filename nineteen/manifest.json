@@ -5,7 +5,7 @@
   "description": "Finds words of 19 characters long in Dutch webpages.",
   "background": {
     "scripts": [ "background.js" ],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_icon": { "19": "icon19.png", "38": "icon38.png" },
