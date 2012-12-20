@@ -29,8 +29,8 @@ function Matrix( pWidth, pHeight ) {
 
   // wipe invisible series
   setInterval( function() {
-    series = _.filter( series, function( s ) {
-      return !s.isObsolete();
+    series = _.reject( series, function( s ) {
+      return s.isObsolete();
     } );
   }, 500 );
 
@@ -44,8 +44,8 @@ function Matrix( pWidth, pHeight ) {
     context.fillRect( 0, 0, 1000, 1000 );
     context.fillStyle = 'rgb( 0, 255, 0 )';
     _.chain( series )
-      .filter( function( s ) { return !s.isObsolete(); } )
-      .each( function( s ) { s.step(); } );
+      .reject( function( s ) { return s.isObsolete(); } )
+      .invoke( 'step' )
   }, 30 );
 };
 
