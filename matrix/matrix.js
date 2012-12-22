@@ -9,12 +9,15 @@ function Matrix( pWidth, pHeight ) {
     var x = _.random( 1, pWidth );
     var y = _.random( 1, pHeight - pLength + 1 );
 
+    // use a slight offset to create a random effect
+    var offset = _.random( -3, 3 );
+
     var currentLength = 0;
 
     this.step = function() {
       ++currentLength;
       var c = alphabet[ _.random( 0, alphabet.length - 1 ) ];
-      context.fillText( c, x * 10, ( y + currentLength - 1 ) * 10 );
+      context.fillText( c, x * 10 + offset, ( y + currentLength - 1 ) * 10 );
     }
 
     this.isObsolete = function() {
