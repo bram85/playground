@@ -39,12 +39,12 @@ function Matrix( pWidth, pHeight ) {
 
   // initialize background
   context.fillStyle = 'rgb( 0, 0, 0 )';
-  context.fillRect( 0, 0, 1000, 1000 );
+  context.fillRect( 0, 0, pWidth, pHeight );
 
   // redraw
   setInterval( function() {
     context.fillStyle = 'rgba( 0, 0, 0, 0.06 )';
-    context.fillRect( 0, 0, 1000, 1000 );
+    context.fillRect( 0, 0, pWidth, pHeight );
     context.fillStyle = 'rgb( 0, 255, 0 )';
     _.chain( series )
       .reject( function( s ) { return s.isObsolete(); } )
